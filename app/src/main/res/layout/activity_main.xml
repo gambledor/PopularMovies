@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
+    tools:context="it.globrutto.popularmovies.MainActivity">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_movie_images"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <TextView
+        android:id="@+id/tv_error_message_display"
+        android:padding="16dp"
+        android:textSize="22dp"
+        android:visibility="invisible"
+        android:text="@string/error_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    
+    <ProgressBar
+        android:id="@+id/pb_loadingIndicator"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        android:layout_width="42dp"
+        android:layout_height="42dp" />
+
+</FrameLayout>

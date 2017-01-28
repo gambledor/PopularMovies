@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_settings" translatable="false">Settings</string>
+    <string name="action_refresh" translatable="false">Refresh</string>
+    <string name="network_connectivity_error">Network not available</string>
+    <string name="internet_availability_error">Internet connection not available</string>
+</resources>
