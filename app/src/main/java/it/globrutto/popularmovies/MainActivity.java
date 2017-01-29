@@ -1,6 +1,7 @@
 package it.globrutto.popularmovies;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -26,9 +27,11 @@ import it.globrutto.popularmovies.utility.NetworkUtility;
 import it.globrutto.popularmovies.utility.PopularMoviesJsonUtils;
 import it.globrutto.popularmovies.utility.Utility;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+
+    private static final String DEFAULT_ORDER = "popular";
 
     private RecyclerView mRecyclerView = null;
 
@@ -53,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         mErrorMessageDisplay = (TextView) findViewById(R.id.tv_error_message_display);
         // The MovieAdapter is responsible for linking our movies data to the View that will end up
         // displaing our data.
-        mMovieAdapter = new MovieAdapter(mContext);
+        mMovieAdapter = new MovieAdapter(mContext, this);
         // attach the adapter to recycler view
         mRecyclerView.setAdapter(mMovieAdapter);
         // create a GridLayoutManager
@@ -66,20 +69,28 @@ public class MainActivity extends AppCompatActivity {
         // get reference to loading indicator
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loadingIndicator);
         // Once all our view are setup we can load the data
-        loadMovieData();
+        loadMovieData(DEFAULT_ORDER);
     }
 
-    private void loadMovieData() {
+    @Override
+    public void onClickItem(Movie movie) {
+        Log.d(TAG, "Enter onClickItem");
+        Class destinaction = DetailActivity.class;
+        Intent intentToStartDetailActivity = new Intent(mContext, destinaction);
+        intentToStartDetailActivity.putExtra("movie", movie);
+        startActivity(intentToStartDetailActivity);
+        Log.d(TAG, "Exit onClickItem");
+    }
+
+    private void loadMovieData(String orderBy) {
         boolean isNetworkAvailable = NetworkUtility.isNetworkAvailable(this);
         boolean isInternetAvailable = NetworkUtility.isInternetAvailable();
-        Log.d(TAG, "network: " + isNetworkAvailable);
-        Log.d(TAG, "internet: " + isInternetAvailable);
         if (!isNetworkAvailable) {
             Toast.makeText(mContext, R.string.network_connectivity_error, Toast.LENGTH_LONG).show();
         } else if (!isInternetAvailable) {
             Toast.makeText(mContext, R.string.internet_availability_error, Toast.LENGTH_LONG).show();
         } else {
-            new MovieTask().execute("popular");
+            new MovieTask().execute(orderBy);
         }
     }
 
@@ -112,12 +123,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int selectedItem = item.getItemId();
-        if (selectedItem == R.id.action_refresh) {
-            loadMovieData();
+        if (selectedItem == R.id.action_popularity_sort) {
+            loadMovieData(DEFAULT_ORDER);
             return true;
         }
-        if (selectedItem == R.id.action_settings) {
-            Log.d(TAG, "action_settings clicked");
+        if (selectedItem == R.id.action_top_rated_sort) {
+            loadMovieData("top_rated");
             return true;
         }
 

@@ -1,14 +1,15 @@
 package it.globrutto.popularmovies.model;
 
-import java.io.Serializable;
-import java.util.Date;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
  * Created by giuseppelobrutto on 22/01/17.
  */
 
-public class Movie implements Serializable {
+public class Movie implements Parcelable {
 
     private int id = 0;
 
@@ -26,7 +27,7 @@ public class Movie implements Serializable {
 
     private String posterPath = null;
 
-    private Date releaseDate = null;
+    private String releaseDate = null;
 
     private String title = null;
 
@@ -35,6 +36,38 @@ public class Movie implements Serializable {
     private double voteAverage = 0.;
 
     private int voteCount = 0;
+
+    private String originalTitle;
+
+    public Movie () {}
+
+    private Movie(Parcel in) {
+        id = in.readInt();
+        adult = in.readByte() != 0;
+        backdropPath = in.readString();
+        originalLanguate = in.readString();
+        overview = in.readString();
+        popularity = in.readString();
+        posterPath = in.readString();
+        releaseDate = in.readString();
+        title = in.readString();
+        video = in.readByte() != 0;
+        voteAverage = in.readDouble();
+        voteCount = in.readInt();
+        originalTitle = in.readString();
+    }
+
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -100,11 +133,11 @@ public class Movie implements Serializable {
         this.posterPath = posterPath;
     }
 
-    public Date getReleaseDate() {
+    public String getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(Date releaseDate) {
+    public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
 
@@ -140,6 +173,14 @@ public class Movie implements Serializable {
         this.voteCount = voteCount;
     }
 
+    public void setOriginalTitle(String originalTitle) {
+        this.originalTitle = originalTitle;
+    }
+
+    public String getOriginalTitle() {
+        return originalTitle;
+    }
+
     @Override
     public String toString() {
         return "Movie{" +
@@ -151,11 +192,35 @@ public class Movie implements Serializable {
                 ", overview='" + overview + '\'' +
                 ", popularity='" + popularity + '\'' +
                 ", posterPath='" + posterPath + '\'' +
-                ", releaseDate=" + releaseDate +
+                ", releaseDate='" + releaseDate + '\'' +
                 ", title='" + title + '\'' +
                 ", video=" + video +
                 ", voteAverage=" + voteAverage +
                 ", voteCount=" + voteCount +
+                ", originalTitle='" + originalTitle + '\'' +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(id);
+        parcel.writeByte((byte) (adult ? 1 : 0));
+        parcel.writeString(backdropPath);
+        parcel.writeString(originalLanguate);
+        parcel.writeString(overview);
+        parcel.writeString(popularity);
+        parcel.writeString(posterPath);
+        parcel.writeString(releaseDate);
+        parcel.writeString(title);
+        parcel.writeByte((byte) (video ? 1 : 0));
+        parcel.writeDouble(voteAverage);
+        parcel.writeInt(voteCount);
+        parcel.writeString(originalTitle);
+    }
+
 }

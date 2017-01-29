@@ -31,6 +31,8 @@ public class NetworkUtility {
 
     private static final String BASE_IMG_SIZE = "w185/";
 
+    private static final String CARD_HEADER_IMAGE_SIZE = "w500/";
+
     private static final String API_KEY_PARAM = "api_key";
 
     private static final String LANGUAGE_PARAM = "language";
@@ -59,8 +61,15 @@ public class NetworkUtility {
         return url;
     }
 
-    public static URL buildImageUrl(String posterPath) {
-        Uri builtUri = Uri.parse(BASE_IMAGE_MOVIE_URL + BASE_IMG_SIZE + posterPath).buildUpon().build();
+    /**
+     * To build the image url
+     * @param aImagePath The image path
+     * @param aImageSizeType The image type size we ask for. 0 poster image w185, 1 backdrop image w500
+     * @return The image URL
+     */
+    public static URL buildImageUrl(String aImagePath, int aImageSizeType) {
+        String imageSize = aImageSizeType == 0 ? BASE_IMG_SIZE : CARD_HEADER_IMAGE_SIZE;
+        Uri builtUri = Uri.parse(BASE_IMAGE_MOVIE_URL + imageSize + aImagePath).buildUpon().build();
         Log.v(TAG, builtUri.toString());
         URL url = null;
         try {
@@ -100,7 +109,7 @@ public class NetworkUtility {
     /**
      * Looks for network connectivity
      *
-     * @param activity
+     * @param activity The caller activity
      * @return The network state
      */
     public static boolean isNetworkAvailable(Activity activity) {

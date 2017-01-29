@@ -1,9 +1,11 @@
 <resources>
-    <string name="app_name">Popular Movies</string>
+    <string name="app_name">Pop Movies</string>
     <string name="error_message">An error has occurred. Please try again.</string>
-    <string name="action_settings" translatable="false">Settings</string>
+    <string name="action_popularity" translatable="false">Popularity</string>
+    <string name="action_top_rated" translatable="false">Top Rated</string>
     <string name="action_refresh" translatable="false">Refresh</string>
 
     <string name="network_connectivity_error">Network not available</string>
     <string name="internet_availability_error">Internet connection not available</string>
+    <string name="detail_activity_name">MovieDetail</string>
 </resources>

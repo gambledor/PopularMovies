@@ -15,7 +15,6 @@ import it.globrutto.popularmovies.model.Movie;
 /**
  * Created by giuseppelobrutto on 22/01/17.
  */
-
 public class PopularMoviesJsonUtils {
 
     public static PopularResponse getMovieObjectsFromJson(Context context, String moviesJsonStr)
@@ -44,7 +43,12 @@ public class PopularMoviesJsonUtils {
             final String BACKDROP_PATH = "backdrop_path";
             final String GENRE_IDS = "genre_ids";
             final String ORIGINAL_LANGUAGE = "original_language";
+            final String ORIGINAL_TITLE = "original_title";
             final String POSTER_PATH = "poster_path";
+            final String RELEASE_DATE = "release_date";
+            final String OVERVIEW = "overview";
+            final String VOTE_AVERAGE = "vote_average";
+            final String VOTE_COUNT = "vote_count";
 
             List<Movie> movies = new ArrayList<>();
             JSONArray results = jsonResponse.getJSONArray(RESULTS);
@@ -74,7 +78,21 @@ public class PopularMoviesJsonUtils {
                 if (movieJsonObject.has(ORIGINAL_LANGUAGE)) {
                     movie.setOriginalLanguate(movieJsonObject.getString(ORIGINAL_LANGUAGE));
                 }
-                // TODO: 22/01/17 continue to load the model see popular.json file
+                if (movieJsonObject.has(ORIGINAL_TITLE)) {
+                    movie.setOriginalTitle(movieJsonObject.getString(ORIGINAL_TITLE));
+                }
+                if (movieJsonObject.has(RELEASE_DATE)) {
+                    movie.setReleaseDate(movieJsonObject.getString(RELEASE_DATE));
+                }
+                if (movieJsonObject.has(OVERVIEW)) {
+                    movie.setOverview(movieJsonObject.getString(OVERVIEW));
+                }
+                if (movieJsonObject.has(VOTE_AVERAGE)) {
+                    movie.setVoteAverage(movieJsonObject.getDouble(VOTE_AVERAGE));
+                }
+                if (movieJsonObject.has(VOTE_COUNT)) {
+                    movie.setVoteCount(movieJsonObject.getInt(VOTE_COUNT));
+                }
                 movies.add(movie);
             }
             popularResponse.setResults(movies);
