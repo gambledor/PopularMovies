@@ -41,7 +41,7 @@ public class Movie implements Parcelable {
 
     public Movie () {}
 
-    private Movie(Parcel in) {
+    protected Movie(Parcel in) {
         id = in.readInt();
         adult = in.readByte() != 0;
         backdropPath = in.readString();

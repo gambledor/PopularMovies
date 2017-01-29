@@ -19,6 +19,7 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import it.globrutto.popularmovies.http.response.PopularResponse;
@@ -33,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     private static final String DEFAULT_ORDER = "popular";
 
+    private String currentSortOrder = DEFAULT_ORDER;
+
     private RecyclerView mRecyclerView = null;
 
     private TextView mErrorMessageDisplay = null;
@@ -42,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private MovieAdapter mMovieAdapter = null;
 
     private Context mContext = null;
+
+    private ArrayList<Movie> mChachedMovies = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,28 +74,55 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         // get reference to loading indicator
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loadingIndicator);
         // Once all our view are setup we can load the data
-        loadMovieData(DEFAULT_ORDER);
+        if (savedInstanceState != null ) {
+            if (savedInstanceState.containsKey("movies")) {
+                Log.d(TAG, "movis on bundle found");
+                mChachedMovies = savedInstanceState.getParcelableArrayList("movies");
+                Log.d(TAG, "size on bundle " + mChachedMovies.size());
+            }
+            if (savedInstanceState.containsKey("sortOrder")) {
+                currentSortOrder = savedInstanceState.getString("sortOrder");
+            }
+        }
+        loadMovieData(currentSortOrder);
+    }
+
+    /**
+     * To save the current app state
+     *
+     * @param outState The bundle
+     */
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList("movies", mChachedMovies);
+        Log.d(TAG, "onSaveInstanceState.sortOrder " + currentSortOrder);
+        outState.putString("sortOrder", currentSortOrder);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onClickItem(Movie movie) {
-        Log.d(TAG, "Enter onClickItem");
         Class destinaction = DetailActivity.class;
         Intent intentToStartDetailActivity = new Intent(mContext, destinaction);
         intentToStartDetailActivity.putExtra("movie", movie);
         startActivity(intentToStartDetailActivity);
-        Log.d(TAG, "Exit onClickItem");
     }
 
     private void loadMovieData(String orderBy) {
-        boolean isNetworkAvailable = NetworkUtility.isNetworkAvailable(this);
-        boolean isInternetAvailable = NetworkUtility.isInternetAvailable();
-        if (!isNetworkAvailable) {
-            Toast.makeText(mContext, R.string.network_connectivity_error, Toast.LENGTH_LONG).show();
-        } else if (!isInternetAvailable) {
-            Toast.makeText(mContext, R.string.internet_availability_error, Toast.LENGTH_LONG).show();
+        if (mChachedMovies != null && !mChachedMovies.isEmpty() && currentSortOrder.equals(orderBy)) {
+            Log.d(TAG, "Setting mChachedMovies from bundle");
+            mMovieAdapter.setMovieData(mChachedMovies);
         } else {
-            new MovieTask().execute(orderBy);
+            currentSortOrder = orderBy;
+            boolean isNetworkAvailable = NetworkUtility.isNetworkAvailable(this);
+            boolean isInternetAvailable = NetworkUtility.isInternetAvailable();
+            if (!isNetworkAvailable) {
+                Toast.makeText(mContext, R.string.network_connectivity_error, Toast.LENGTH_LONG).show();
+            } else if (!isInternetAvailable) {
+                Toast.makeText(mContext, R.string.internet_availability_error, Toast.LENGTH_LONG).show();
+            } else {
+                new MovieTask().execute(orderBy);
+            }
         }
     }
 
@@ -184,6 +216,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             mLoadingIndicator.setVisibility(View.INVISIBLE);
             if (movieData != null) {
                 mMovieAdapter.setMovieData(movieData);
+                mChachedMovies = (ArrayList<Movie>) movieData;
                 showMovieDataView();
             } else {
                 showErrorMessage();

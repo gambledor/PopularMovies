@@ -70,7 +70,6 @@ public class NetworkUtility {
     public static URL buildImageUrl(String aImagePath, int aImageSizeType) {
         String imageSize = aImageSizeType == 0 ? BASE_IMG_SIZE : CARD_HEADER_IMAGE_SIZE;
         Uri builtUri = Uri.parse(BASE_IMAGE_MOVIE_URL + imageSize + aImagePath).buildUpon().build();
-        Log.v(TAG, builtUri.toString());
         URL url = null;
         try {
             url = new URL(builtUri.toString());
