@@ -13,6 +13,8 @@ import com.squareup.picasso.Picasso;
 import java.net.URL;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import it.globrutto.popularmovies.model.Movie;
 import it.globrutto.popularmovies.utility.NetworkUtility;
 
@@ -65,7 +67,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
         }
         Movie movie = mMovieData.get(position);
         URL url = NetworkUtility.buildImageUrl(movie.getPosterPath(), 0);
-        Picasso.with(mContext).load(url.toString()).into(holder.mPosterImageView);
+        Picasso.with(mContext).load(url.toString())
+                .placeholder(R.mipmap.ic_image)
+                .error(R.mipmap.ic_image)
+                .into(holder.mPosterImageView);
     }
 
     /**
@@ -94,11 +99,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
         private final String TAG = MovieAdapterViewHolder.class.getSimpleName();
 
-        public final ImageView mPosterImageView;
+        @BindView(R.id.iv_poster_image)
+        public ImageView mPosterImageView;
 
         public MovieAdapterViewHolder(View itemView) {
             super(itemView);
-            mPosterImageView = (ImageView) itemView.findViewById(R.id.iv_poster_image);
+            ButterKnife.bind(this, itemView);
+//            mPosterImageView = (ImageView) itemView.findViewById(R.id.iv_poster_image);
             itemView.setOnClickListener(this);
         }
 

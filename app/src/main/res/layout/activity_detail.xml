@@ -1,97 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_detail"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="8dp"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="it.globrutto.popularmovies.DetailActivity">
+             xmlns:tools="http://schemas.android.com/tools"
+             android:id="@+id/activity_detail"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:layout_margin="8dp"
+             android:paddingTop="@dimen/activity_vertical_margin"
+             tools:context="it.globrutto.popularmovies.DetailActivity">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    <android.support.v7.widget.CardView
-        android:id="@+id/cv_detail"
-        android:layout_centerHorizontal="true"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <RelativeLayout
+        <android.support.v7.widget.CardView
+            android:id="@+id/cv_detail"
+            android:layout_centerHorizontal="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/iv_header_image"
-                android:layout_alignParentTop="true"
-                android:scaleType="centerCrop"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp" />
-
-            <TextView
-                android:id="@+id/tv_header_title"
-                android:textStyle="bold"
-                android:textSize="22dp"
-                android:padding="8dp"
-                android:textColor="@color/colorWhite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-
-            <LinearLayout
-                android:id="@+id/ll_details"
-                android:layout_below="@+id/iv_header_image"
-                android:padding="16dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/iv_thumbnail"
+                    android:id="@+id/iv_header_image"
+                    android:layout_alignParentTop="true"
+                    android:scaleType="centerCrop"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp" />
+
+                <TextView
+                    android:id="@+id/tv_header_title"
+                    android:textStyle="bold"
+                    android:textSize="22dp"
+                    android:padding="8dp"
+                    android:textColor="@color/colorWhite"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
+
                 <LinearLayout
+                    android:id="@+id/ll_details"
+                    android:layout_below="@+id/iv_header_image"
                     android:padding="16dp"
-                    android:layout_marginLeft="32dp"
-                    android:orientation="vertical"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/tv_title"
-                        android:textStyle="italic"
-                        android:textSize="16dp"
+                    <ImageView
+                        android:id="@+id/iv_thumbnail"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
-                    <TextView
-                        android:id="@+id/tv_year"
+                    <LinearLayout
+                        android:padding="16dp"
+                        android:layout_marginLeft="32dp"
+                        android:orientation="vertical"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/tv_movie_rating"
-                        android:text="Rating "
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        <TextView
+                            android:id="@+id/tv_title"
+                            android:textStyle="italic"
+                            android:textSize="16dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
 
-                    <TextView
-                        android:id="@+id/tv_movie_votes"
-                        android:text="Votes "
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        <TextView
+                            android:id="@+id/tv_year"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:id="@+id/tv_movie_rating"
+                            android:text="Rating "
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:id="@+id/tv_movie_votes"
+                            android:text="Votes "
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_movie_overview"
+                    android:layout_below="@id/ll_details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/tv_movie_overview"
-                android:layout_below="@id/ll_details"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <!-- Trailer -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_movie_overview"
+                    android:id="@+id/tv_header_trailer_title"
+                    android:padding="16dp"
+                    android:text="@string/tv_trailer"
+                    android:textColor="@android:color/black"
+                    android:textSize="22dp" />
 
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
+                <FrameLayout
+                    android:layout_below="@id/tv_header_trailer_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_movie_trailers"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" >
+
+                    </android.support.v7.widget.RecyclerView>
+
+                   <TextView
+                       android:id="@+id/tv_error_trailer_message_display"
+                       android:padding="16dp"
+                       android:text="@string/error_message"
+                       android:layout_gravity="center"
+                       android:textSize="22dp"
+                       android:visibility="invisible"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"/>
+
+                    <ProgressBar
+                        android:id="@+id/pb_loading_trailer_indicator"
+                        android:visibility="invisible"
+                        android:layout_gravity="center"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"/>
+
+                </FrameLayout>
+
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
     </ScrollView>
 </FrameLayout>

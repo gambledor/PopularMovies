@@ -8,4 +8,5 @@
     <string name="network_connectivity_error">Network not available</string>
     <string name="internet_availability_error">Internet connection not available</string>
     <string name="detail_activity_name">MovieDetail</string>
+    <string name="tv_trailer">Trailers</string>
 </resources>

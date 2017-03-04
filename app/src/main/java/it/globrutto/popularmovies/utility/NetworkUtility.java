@@ -39,6 +39,10 @@ public class NetworkUtility {
 
     private static final String PAGE_PARAM = "page";
 
+    private static final String TRAILER_PATH = "/videos";
+
+    private static final String BASE_YOUTUBE_URL = "https://www.youtube.com/watch";
+
     /**
      * Build the URL used to talk to the movie db server using popularity.
      *
@@ -56,6 +60,40 @@ public class NetworkUtility {
             url = new URL(buildUri.toString());
         } catch (MalformedURLException e) {
             Log.e(TAG, e.getMessage());
+        }
+
+        return url;
+    }
+
+    /**
+     * To build the trailer url
+     *
+     * @param movieId The movie id
+     * @return The trailer url
+     */
+    public static URL buildTrailerUrl(int movieId) {
+        Uri buildUri = Uri.parse(BASE_API_URL + "/" + movieId + TRAILER_PATH).buildUpon()
+                .appendQueryParameter(API_KEY_PARAM, API_KEY)
+                .appendQueryParameter(LANGUAGE_PARAM, LANGUAGE)
+                .build();
+        URL url = null;
+        try {
+            url = new URL(buildUri.toString());
+        } catch (MalformedURLException e) {
+            Log.e(TAG, e.getMessage());
+        }
+
+        return url;
+    }
+
+    public static URL buildYoutubeUrl(String key) {
+        Uri buildUri = Uri.parse(BASE_YOUTUBE_URL).buildUpon()
+                .appendQueryParameter("v", key).build();
+        URL url = null;
+        try {
+            url = new URL(buildUri.toString());
+        } catch (MalformedURLException e) {
+           Log.e(TAG, e.getMessage()) ;
         }
 
         return url;
@@ -138,4 +176,5 @@ public class NetworkUtility {
 
         return result;
     }
+
 }
