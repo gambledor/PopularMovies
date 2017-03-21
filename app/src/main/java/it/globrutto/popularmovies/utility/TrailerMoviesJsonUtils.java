@@ -1,6 +1,5 @@
 package it.globrutto.popularmovies.utility;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 
 import org.json.JSONArray;
@@ -21,12 +20,11 @@ public class TrailerMoviesJsonUtils {
     /**
      * To parse trailer movie json response
      *
-     * @param context The context
      * @param jsonTrailerResponse the movie trailer json string response
      * @return The trailer response Trailer collection
      */
     public static TrailerResponse getTrailerObjectsFromJson(
-            @NonNull Context context, @NonNull String jsonTrailerResponse) throws JSONException {
+            @NonNull String jsonTrailerResponse) throws JSONException {
 
         final String RESULTS = "results";
 

@@ -40,7 +40,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
     /**
      * Create a Movie Adapter
-     *
      * @param context The app context
      * @param clickHandler The click handler reference class
      */
@@ -63,7 +62,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     public void onBindViewHolder(MovieAdapterViewHolder holder, int position) {
         if (mMovieData == null || mMovieData.isEmpty()) {
             Log.d(TAG, "mMovieData is: null or empty");
-            return;
         }
         Movie movie = mMovieData.get(position);
         URL url = NetworkUtility.buildImageUrl(movie.getPosterPath(), 0);
@@ -105,7 +103,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
         public MovieAdapterViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-//            mPosterImageView = (ImageView) itemView.findViewById(R.id.iv_poster_image);
             itemView.setOnClickListener(this);
         }
 

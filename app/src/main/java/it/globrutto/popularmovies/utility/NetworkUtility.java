@@ -43,6 +43,8 @@ public class NetworkUtility {
 
     private static final String BASE_YOUTUBE_URL = "https://www.youtube.com/watch";
 
+    private static final String REVIEW_PATH = "/reviews";
+
     /**
      * Build the URL used to talk to the movie db server using popularity.
      *
@@ -94,6 +96,23 @@ public class NetworkUtility {
             url = new URL(buildUri.toString());
         } catch (MalformedURLException e) {
            Log.e(TAG, e.getMessage()) ;
+        }
+
+        return url;
+    }
+
+    public static URL buildReviewUrl(int movieId) {
+        Uri buildUri = Uri.parse(BASE_API_URL + '/' + movieId + REVIEW_PATH).buildUpon()
+                .appendQueryParameter(API_KEY_PARAM, API_KEY)
+                .appendQueryParameter(LANGUAGE_PARAM, LANGUAGE)
+                .appendQueryParameter(PAGE_PARAM, "1")
+                .build();
+
+        URL url = null;
+        try {
+            url = new URL(buildUri.toString());
+        } catch (MalformedURLException e) {
+            Log.e(TAG, e.getMessage());
         }
 
         return url;

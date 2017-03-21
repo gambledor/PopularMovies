@@ -76,7 +76,7 @@ public class PopularMoviesJsonUtils {
                     movie.setGenreIds(movieGenreIds);
                 }
                 if (movieJsonObject.has(ORIGINAL_LANGUAGE)) {
-                    movie.setOriginalLanguate(movieJsonObject.getString(ORIGINAL_LANGUAGE));
+                    movie.setOriginalLanguage(movieJsonObject.getString(ORIGINAL_LANGUAGE));
                 }
                 if (movieJsonObject.has(ORIGINAL_TITLE)) {
                     movie.setOriginalTitle(movieJsonObject.getString(ORIGINAL_TITLE));

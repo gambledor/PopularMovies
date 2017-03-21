@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
              xmlns:tools="http://schemas.android.com/tools"
              android:id="@+id/activity_detail"
              android:layout_width="match_parent"
@@ -84,6 +85,14 @@
 
                     </LinearLayout>
 
+                    <ImageButton
+                        android:id="@+id/ib_movie_favorite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        app:srcCompat="@android:drawable/btn_star_big_off"/>
+
                 </LinearLayout>
 
                 <TextView
@@ -99,11 +108,13 @@
                     android:layout_below="@id/tv_movie_overview"
                     android:id="@+id/tv_header_trailer_title"
                     android:padding="16dp"
-                    android:text="@string/tv_trailer"
+                    android:text="@string/tv_trailers_title"
+                    tools:text="@string/tv_trailers_title"
                     android:textColor="@android:color/black"
                     android:textSize="22dp" />
 
                 <FrameLayout
+                    android:id="@+id/trailer_layout"
                     android:layout_below="@id/tv_header_trailer_title"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
@@ -115,25 +126,32 @@
 
                     </android.support.v7.widget.RecyclerView>
 
-                   <TextView
-                       android:id="@+id/tv_error_trailer_message_display"
-                       android:padding="16dp"
-                       android:text="@string/error_message"
-                       android:layout_gravity="center"
-                       android:textSize="22dp"
-                       android:visibility="invisible"
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"/>
-
-                    <ProgressBar
-                        android:id="@+id/pb_loading_trailer_indicator"
-                        android:visibility="invisible"
-                        android:layout_gravity="center"
-                        android:layout_width="42dp"
-                        android:layout_height="42dp"/>
-
                 </FrameLayout>
 
+                <!-- Reviews -->
+                <TextView
+                    android:id="@+id/tv_review_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/trailer_layout"
+                    android:padding="16dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="22dp"
+                    android:text="@string/reviews_title"
+                    tools:text="@string/reviews_title"/>
+
+                <FrameLayout
+                    android:layout_below="@id/tv_review_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_movie_reviews"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    </android.support.v7.widget.RecyclerView>
+                </FrameLayout>
             </RelativeLayout>
         </android.support.v7.widget.CardView>
     </ScrollView>

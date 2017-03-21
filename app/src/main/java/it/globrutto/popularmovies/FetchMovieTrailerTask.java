@@ -34,7 +34,6 @@ public class FetchMovieTrailerTask extends AsyncTask<Integer, Void, List<Trailer
 
     @Override
     protected List<Trailer> doInBackground(Integer... integers) {
-        Log.d(TAG, "Enter doInBackground");
         if (integers.length == 0) return null;
 
 
@@ -44,8 +43,7 @@ public class FetchMovieTrailerTask extends AsyncTask<Integer, Void, List<Trailer
         try {
             String jsonTrailerResponse = NetworkUtility.getResponseFromHttpURL(url);
             Log.d(TAG, "trailer response -> " + jsonTrailerResponse);
-            trailerResponse = TrailerMoviesJsonUtils.getTrailerObjectsFromJson(
-                    context, jsonTrailerResponse);
+            trailerResponse = TrailerMoviesJsonUtils.getTrailerObjectsFromJson(jsonTrailerResponse);
         } catch (IOException | JSONException e) {
             Log.e(TAG, e.getMessage());
         }

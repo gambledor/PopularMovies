@@ -19,7 +19,7 @@ public class Movie implements Parcelable {
 
     private List<Integer> genreIds = null;
 
-    private String originalLanguate = null;
+    private String originalLanguage = null;
 
     private String overview = null;
 
@@ -45,7 +45,7 @@ public class Movie implements Parcelable {
         id = in.readInt();
         adult = in.readByte() != 0;
         backdropPath = in.readString();
-        originalLanguate = in.readString();
+        originalLanguage = in.readString();
         overview = in.readString();
         popularity = in.readString();
         posterPath = in.readString();
@@ -101,12 +101,12 @@ public class Movie implements Parcelable {
         this.genreIds = genreIds;
     }
 
-    public String getOriginalLanguate() {
-        return originalLanguate;
+    public String getOriginalLanguage() {
+        return originalLanguage;
     }
 
-    public void setOriginalLanguate(String originalLanguate) {
-        this.originalLanguate = originalLanguate;
+    public void setOriginalLanguage(String originalLanguage) {
+        this.originalLanguage = originalLanguage;
     }
 
     public String getOverview() {
@@ -188,7 +188,7 @@ public class Movie implements Parcelable {
                 ", adult=" + adult +
                 ", backdropPath='" + backdropPath + '\'' +
                 ", genreIds=" + genreIds +
-                ", originalLanguate='" + originalLanguate + '\'' +
+                ", originalLanguage='" + originalLanguage + '\'' +
                 ", overview='" + overview + '\'' +
                 ", popularity='" + popularity + '\'' +
                 ", posterPath='" + posterPath + '\'' +
@@ -211,7 +211,7 @@ public class Movie implements Parcelable {
         parcel.writeInt(id);
         parcel.writeByte((byte) (adult ? 1 : 0));
         parcel.writeString(backdropPath);
-        parcel.writeString(originalLanguate);
+        parcel.writeString(originalLanguage);
         parcel.writeString(overview);
         parcel.writeString(popularity);
         parcel.writeString(posterPath);

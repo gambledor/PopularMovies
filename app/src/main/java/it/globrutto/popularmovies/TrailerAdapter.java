@@ -68,9 +68,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
         }
 
         Trailer trailer = mTrailers.get(position);
-        Log.d(TAG, "trailer name -> " + trailer.getName());
         holder.mTrailerTitle.setText(trailer.getName());
-        Log.d(TAG, "after set -> " + holder.mTrailerTitle.getText().toString());
     }
 
     /**

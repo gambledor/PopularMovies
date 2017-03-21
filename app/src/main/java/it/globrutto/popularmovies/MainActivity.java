@@ -46,7 +46,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     private Context mContext = null;
 
-    private ArrayList<Movie> mChachedMovies = new ArrayList<>();
+    private ArrayList<Movie> mCachedMovies = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,12 +72,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         // Once all our view are setup we can load the data
         if (savedInstanceState != null ) {
             if (savedInstanceState.containsKey("movies")) {
-                mChachedMovies = savedInstanceState.getParcelableArrayList("movies");
+                mCachedMovies = savedInstanceState.getParcelableArrayList("movies");
             }
             if (savedInstanceState.containsKey("sortOrder")) {
                 currentSortOrder = savedInstanceState.getString("sortOrder");
             }
         }
+
         loadMovieData(currentSortOrder);
     }
 
@@ -87,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
      */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList("movies", mChachedMovies);
+        outState.putParcelableArrayList("movies", mCachedMovies);
         outState.putString("sortOrder", currentSortOrder);
         super.onSaveInstanceState(outState);
     }
@@ -101,8 +103,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     private void loadMovieData(String orderBy) {
-        if (mChachedMovies != null && !mChachedMovies.isEmpty() && currentSortOrder.equals(orderBy)) {
-            mMovieAdapter.setMovieData(mChachedMovies);
+        if (mCachedMovies != null && !mCachedMovies.isEmpty() && currentSortOrder.equals(orderBy)) {
+            mMovieAdapter.setMovieData(mCachedMovies);
         } else {
             currentSortOrder = orderBy;
             boolean isNetworkAvailable = NetworkUtility.isNetworkAvailable(this);
@@ -156,8 +158,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             return true;
         }
 
+        if (selectedItem == R.id.action_favorite_sort) {
+            loadMovieData("favorites");
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
+
 
     /**
      *
