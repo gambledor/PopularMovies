@@ -39,6 +39,8 @@ public class Movie implements Parcelable {
 
     private String originalTitle;
 
+    private int favorite;
+
     public Movie () {}
 
     protected Movie(Parcel in) {
@@ -55,6 +57,7 @@ public class Movie implements Parcelable {
         voteAverage = in.readDouble();
         voteCount = in.readInt();
         originalTitle = in.readString();
+        favorite = in.readInt();
     }
 
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
@@ -198,6 +201,7 @@ public class Movie implements Parcelable {
                 ", voteAverage=" + voteAverage +
                 ", voteCount=" + voteCount +
                 ", originalTitle='" + originalTitle + '\'' +
+                ", favorite='" + favorite + "\'" +
                 '}';
     }
 
@@ -221,6 +225,14 @@ public class Movie implements Parcelable {
         parcel.writeDouble(voteAverage);
         parcel.writeInt(voteCount);
         parcel.writeString(originalTitle);
+        parcel.writeInt(favorite);
     }
 
+    public void setFavorite(int favorite) {
+        this.favorite = favorite;
+    }
+
+    public int getFavorite() {
+        return favorite;
+    }
 }

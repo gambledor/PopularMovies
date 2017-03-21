@@ -146,15 +146,27 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
                     Log.e(TAG, e.getMessage(), e);
                 }
 
-                mRating.setText("Rating: " + String.valueOf(movie.getVoteAverage()) + "/10");
+                mRating.setText("Rating: " + String.format("%.1f", movie.getVoteAverage()) + "/10");
                 mVotes.setText("Votes: " + movie.getVoteCount() + "");
                 mOverview.setText(movie.getOverview());
+
+                Log.d(TAG, "movie is favorite: " + movie.getFavorite());
+                if (movie.getFavorite() == 1) {
+                    mFavoriteImageButton.setImageResource(android.R.drawable.btn_star_big_on);
+                }
 
                 mFavoriteImageButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         MovieDao movieDao = new MovieDao(getApplicationContext());
-                        movieDao.addFavoriteMovie(movie);
+                        if (movie.getFavorite() != 1) {
+                            movieDao.addFavoriteMovie(movie);
+                            movie.setFavorite(1);
+                            mFavoriteImageButton.setImageResource(android.R.drawable.btn_star_big_on);
+                        } else {
+                            movieDao.deleteFavoriteMovie(movie);
+                            mFavoriteImageButton.setImageResource(android.R.drawable.btn_star_big_off);
+                        }
                     }
                 });
 

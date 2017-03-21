@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +61,7 @@ public class MovieDao {
                         cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_VOTE_COUNT)));
                 movie.setOverview(cursor.getString(
                         cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_OVERVIEW)));
+                movie.setFavorite(1);
 //                Log.d(TAG, "movie in db -> " + movie);
                 movies.add(movie);
             } while (cursor.moveToNext());
@@ -82,6 +84,17 @@ public class MovieDao {
         cv.put(MovieContract.MovieEntry.COLUMN_OVERVIEW, movie.getOverview());
 
         db.insert(MovieContract.MovieEntry.TABLE_NAME, null, cv);
+        db.close();
+    }
+
+    public void deleteFavoriteMovie(Movie movie) {
+        SQLiteDatabase db = movieDbHelper.getWritableDatabase();
+        // define where clause
+        String selection = MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ?";
+        // define where args
+        String[] selectionArgs = {String.valueOf(movie.getId())};
+        // issue sql statement
+        db.delete(MovieContract.MovieEntry.TABLE_NAME, selection, selectionArgs);
         db.close();
     }
 }
