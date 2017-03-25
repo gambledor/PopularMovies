@@ -31,6 +31,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     private static final String DEFAULT_ORDER = "popular";
 
+    private static final String TOP_RATED =  "top_rated";
+
+    private static final String FAVORITES = "favorites";
+
     private String currentSortOrder = DEFAULT_ORDER;
 
     @BindView(R.id.rv_movie_images)
@@ -111,10 +115,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             boolean isInternetAvailable = NetworkUtility.isInternetAvailable();
             if (!isNetworkAvailable) {
                 Toast.makeText(mContext, R.string.network_connectivity_error, Toast.LENGTH_LONG).show();
-                orderBy = "favorites";
+                orderBy = FAVORITES;
             } else if (!isInternetAvailable) {
                 Toast.makeText(mContext, R.string.internet_availability_error, Toast.LENGTH_LONG).show();
-                orderBy = "favorites";
+                orderBy = FAVORITES;
             }
             mLoadingIndicator.setVisibility(View.VISIBLE);
             new FetchMovieDataTask(this, new FetchMovieDataTaskCompleteListener()).execute(orderBy);
@@ -155,18 +159,25 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             return true;
         }
         if (selectedItem == R.id.action_top_rated_sort) {
-            loadMovieData("top_rated");
+            loadMovieData(TOP_RATED);
             return true;
         }
 
         if (selectedItem == R.id.action_favorite_sort) {
-            loadMovieData("favorites");
+            loadMovieData(FAVORITES);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (currentSortOrder.equals("favorites")) {
+            loadMovieData(FAVORITES);
+        }
+    }
 
     /**
      *

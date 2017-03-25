@@ -34,6 +34,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
+            <ImageButton
+                android:id="@+id/ib_movie_favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/iv_header_image"
+                android:layout_alignParentRight="true"
+                android:layout_weight="1"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:background="@color/colorWhite"
+                app:srcCompat="@android:drawable/btn_star_big_off"/>
 
             <LinearLayout
                 android:id="@+id/ll_details"
@@ -46,6 +58,7 @@
                     android:id="@+id/iv_thumbnail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
+
 
                 <LinearLayout
                     android:padding="8dp"
@@ -80,13 +93,6 @@
 
                 </LinearLayout>
 
-                <ImageButton
-                    android:id="@+id/ib_movie_favorite"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    app:srcCompat="@android:drawable/btn_star_big_off"/>
 
             </LinearLayout>
 
