@@ -13,7 +13,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "movie.db";
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     /**
      * Constructor
@@ -29,7 +29,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
         StringBuffer ddl = new StringBuffer();
         ddl.append("CREATE TABLE %s (")
                 .append("%s INTEGER PRIMARY KEY AUTOINCREMENT, ")
-                .append("%s INTEGER NOT NULL, ") // movieId
+                .append("%s INTEGER NOT NULL UNIQUE, ") // movieId
                 .append("%s TEXT NOT NULL, ") // originalTitle
                 .append("%s TEXT NOT NULL, ") // backdropPath
                 .append("%s TEXT NOT NULL, ") // posterPath
@@ -56,8 +56,10 @@ public class MovieDbHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + MovieContract.MovieEntry.TABLE_NAME);
-        onCreate(sqLiteDatabase);
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+        if (oldVersion < 2) {
+            sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + MovieContract.MovieEntry.TABLE_NAME);
+            onCreate(sqLiteDatabase);
+        }
     }
 }

@@ -12,6 +12,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 import it.globrutto.popularmovies.BuildConfig;
 
@@ -44,6 +45,8 @@ public class NetworkUtility {
     private static final String BASE_YOUTUBE_URL = "https://www.youtube.com/watch";
 
     private static final String REVIEW_PATH = "/reviews";
+
+    private static final long CONNECTION_TIMEOUT = TimeUnit.MINUTES.toMillis(1);
 
     /**
      * Build the URL used to talk to the movie db server using popularity.
@@ -146,6 +149,7 @@ public class NetworkUtility {
      */
     public static String getResponseFromHttpURL(URL movieRequestUrl) throws IOException {
         HttpURLConnection connection =  (HttpURLConnection) movieRequestUrl.openConnection();
+        connection.setConnectTimeout((int) CONNECTION_TIMEOUT);
         try {
             InputStream inputStream = connection.getInputStream();
 

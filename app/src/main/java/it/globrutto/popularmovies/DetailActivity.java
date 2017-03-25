@@ -1,6 +1,8 @@
 package it.globrutto.popularmovies;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -29,7 +32,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import it.globrutto.popularmovies.data.MovieDao;
+import it.globrutto.popularmovies.data.MovieContract;
 import it.globrutto.popularmovies.http.response.ReviewResponse;
 import it.globrutto.popularmovies.model.Movie;
 import it.globrutto.popularmovies.model.Trailer;
@@ -158,13 +161,22 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
                 mFavoriteImageButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        MovieDao movieDao = new MovieDao(getApplicationContext());
                         if (movie.getFavorite() != 1) {
-                            movieDao.addFavoriteMovie(movie);
+                            ContentValues cv = getMovieAsContentValues(movie);
+                            getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, cv);
                             movie.setFavorite(1);
                             mFavoriteImageButton.setImageResource(android.R.drawable.btn_star_big_on);
+                            Toast.makeText(
+                                    getBaseContext(),
+                                    movie.getOriginalTitle() + " added as favorite",
+                                    Toast.LENGTH_SHORT).show();
                         } else {
-                            movieDao.deleteFavoriteMovie(movie);
+                            Uri uri = MovieContract.MovieEntry.CONTENT_URI
+                                    .buildUpon()
+                                    .appendPath(Integer.toString(movie.getId()))
+                                    .build();
+                            getContentResolver().delete(uri, null, null);
+                            movie.setFavorite(0);
                             mFavoriteImageButton.setImageResource(android.R.drawable.btn_star_big_off);
                         }
                     }
@@ -172,6 +184,20 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 
             }
         }
+    }
+
+    private ContentValues getMovieAsContentValues(Movie movie) {
+        ContentValues cv = new ContentValues();
+        cv.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, movie.getId());
+        cv.put(MovieContract.MovieEntry.COLUMN_ORIGINAL_TITLE, movie.getOriginalTitle());
+        cv.put(MovieContract.MovieEntry.COLUMN_BACKDROP_PATH, movie.getBackdropPath());
+        cv.put(MovieContract.MovieEntry.COLUMN_POSTER_PATH, movie.getPosterPath());
+        cv.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, movie.getReleaseDate());
+        cv.put(MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE, movie.getVoteAverage());
+        cv.put(MovieContract.MovieEntry.COLUMN_VOTE_COUNT, movie.getVoteCount());
+        cv.put(MovieContract.MovieEntry.COLUMN_OVERVIEW, movie.getOverview());
+
+        return cv;
     }
 
     private void showErrorMessage() {
@@ -191,13 +217,25 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
      */
     @Override
     public void onClickItem(Trailer trailer) {
-        Log.d(TAG, "onClickItem start intent");
+        Uri uri = Uri.parse(
+                NetworkUtility.buildYoutubeUrl(trailer.getKey()).toString());
+        // Build the intent
         Intent intentStartYouTube = new Intent(Intent.ACTION_VIEW);
         intentStartYouTube.setPackage("com.google.android.youtube");
-        intentStartYouTube.setData(Uri.parse(
-                NetworkUtility.buildYoutubeUrl(trailer.getKey()).toString()));
+        intentStartYouTube.setData(uri);
 
-        startActivity(intentStartYouTube);
+        // Verify it resolves
+        PackageManager packageManager = getPackageManager();
+        List activities = packageManager.queryIntentActivities(intentStartYouTube, PackageManager.MATCH_DEFAULT_ONLY);
+        boolean isIntentSafe = activities.size() > 0;
+
+        // Start an activity if it's safe
+        if (isIntentSafe) {
+            startActivity(intentStartYouTube);
+        } else {
+            Intent intentStartBrowser = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intentStartBrowser);
+        }
     }
 
     /**
@@ -213,33 +251,26 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
             @Override
             protected void onStartLoading() {
                 super.onStartLoading();
-                Log.d(TAG, "Enter onStartLoading");
                 if (args == null) {
-                    Log.d(TAG, "args is null");
                     return;
                 }
                 forceLoad();
-                Log.d(TAG, "Exit onStartLoading");
             }
 
             @Override
             public String loadInBackground() {
-                Log.d(TAG, "Enter loadInBackground");
                 int movieId = args.getInt(MOVIE_ID_EXTRA);
 
                 if (movieId <= 0) return null;
 
                 URL url = NetworkUtility.buildReviewUrl(movieId);
-                Log.d(TAG, "URL -> " + url.toString());
                 String jsonReviewResponse = null;
                 try {
                     jsonReviewResponse = NetworkUtility.getResponseFromHttpURL(url);
-                    Log.d(TAG, "review response -> " + jsonReviewResponse);
                 } catch (IOException e) {
                     Log.e(TAG, e.getMessage());
                 }
 
-                Log.d(TAG, "Exit loadInBackground");
                 return jsonReviewResponse;
             }
 
@@ -284,14 +315,12 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
          */
         @Override
         public void onTaskComplete(List<Trailer> result) {
-            Log.d(TAG, "Enter onTaskComplete");
             if (result != null) {
                 mTrailerAdapter.setTrailers(result);
                 showTrailerView();
             } else {
                 showErrorMessage();
             }
-            Log.d(TAG, "Exit onTaskComplete");
         }
     }
 }

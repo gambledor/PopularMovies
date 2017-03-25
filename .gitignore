@@ -63,3 +63,9 @@ google-services.json
 gen-external-apklibs
 
 # End of https://www.gitignore.io/api/android
+
+.idea/compiler.xml
+
+.idea/copyright/profiles_settings.xml
+
+.idea/misc.xml

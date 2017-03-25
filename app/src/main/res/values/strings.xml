@@ -11,4 +11,6 @@
     <string name="tv_trailers_title">Trailers</string>
     <string name="reviews_title">Reviews</string>
     <string name="favorites">Favorites</string>
+    <string name="rating">Rating</string>
+    <string name="votes">Votes</string>
 </resources>
