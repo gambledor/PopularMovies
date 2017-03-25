@@ -1,6 +1,7 @@
 package it.globrutto.popularmovies;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -9,9 +10,10 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
-import it.globrutto.popularmovies.data.MovieDao;
+import it.globrutto.popularmovies.data.MovieContract;
 import it.globrutto.popularmovies.http.response.PopularResponse;
 import it.globrutto.popularmovies.model.Movie;
 import it.globrutto.popularmovies.utility.NetworkUtility;
@@ -24,7 +26,7 @@ public class FetchMovieDataTask extends AsyncTask<String, Void, List<Movie>>{
 
     private final String TAG = FetchMovieDataTask.class.getSimpleName();
 
-    private Context context;
+    private Context mContext;
 
     private AsyncTaskCompleteListener<List<Movie>> listener;
 
@@ -35,7 +37,7 @@ public class FetchMovieDataTask extends AsyncTask<String, Void, List<Movie>>{
      * @param aListener
      */
     public FetchMovieDataTask(Context aContext, AsyncTaskCompleteListener<List<Movie>> aListener) {
-        context = aContext;
+        mContext = aContext;
         listener = aListener;
     }
 
@@ -74,9 +76,36 @@ public class FetchMovieDataTask extends AsyncTask<String, Void, List<Movie>>{
      * @return The list of movies
      */
     private List<Movie> getFavoriteMovies() {
-        MovieDao movieDao = new MovieDao(context);
+        List<Movie> movies = null;
+        Cursor cursor = mContext.getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI,
+                null, null, null, MovieContract.MovieEntry.COLUMN_MOVIE_ID);
+        if (cursor != null && cursor.moveToFirst()) {
+            movies = new ArrayList<>(cursor.getCount());
+            do {
+                Movie movie = new Movie();
+                movie.setId(cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_MOVIE_ID)));
+                movie.setOriginalTitle(cursor.getString(
+                        cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_ORIGINAL_TITLE)));
+                movie.setBackdropPath(cursor.getString(
+                        cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_BACKDROP_PATH)));
+                movie.setPosterPath(cursor.getString(
+                        cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_POSTER_PATH)));
+                movie.setReleaseDate(cursor.getString(
+                        cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_RELEASE_DATE)));
+                movie.setVoteAverage(cursor.getFloat(
+                        cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE)));
+                movie.setVoteCount(cursor.getInt(
+                        cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_VOTE_COUNT)));
+                movie.setOverview(cursor.getString(
+                        cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_OVERVIEW)));
+                movie.setFavorite(1);
+                movies.add(movie);
+            } while (cursor.moveToNext());
 
-        return movieDao.getAllFavoriteMovie();
+            cursor.close();
+        }
+
+        return movies;
     }
 
     @Nullable
@@ -86,7 +115,7 @@ public class FetchMovieDataTask extends AsyncTask<String, Void, List<Movie>>{
         try {
             String jsonMovieResponse = NetworkUtility.getResponseFromHttpURL(movieRequestUrl);
             popularResponse = PopularMoviesJsonUtils.getMovieObjectsFromJson(
-                    context, jsonMovieResponse);
+                    mContext, jsonMovieResponse);
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());
         } catch (JSONException e) {

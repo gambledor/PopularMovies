@@ -13,6 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:launchMode="singleTop"
             android:name=".MainActivity"
             android:label="@string/app_name">
             <intent-filter>
@@ -28,6 +29,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
+
+        <!-- Register the content provider MovieContentProvider -->
+        <provider
+            android:exported="false"
+            android:authorities="it.globrutto.popularmovies"
+            android:name="it.globrutto.popularmovies.data.MovieContentProvider"/>
+
     </application>
 
 </manifest>
