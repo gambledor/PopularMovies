@@ -3,6 +3,7 @@ package it.globrutto.popularmovies;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -153,8 +154,8 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
                 mVotes.setText("Votes: " + movie.getVoteCount() + "");
                 mOverview.setText(movie.getOverview());
 
-                Log.d(TAG, "movie is favorite: " + movie.getFavorite());
-                if (movie.getFavorite() == 1) {
+
+                if (isFavoriteMovie(movie.getId())) {
                     mFavoriteImageButton.setImageResource(android.R.drawable.btn_star_big_on);
                 }
 
@@ -184,6 +185,24 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 
             }
         }
+    }
+
+    /**
+     * To check if the selected movie is a favorite movie
+     * @param id the movie id
+     * @return true if it is a favorite movie
+     */
+    private boolean isFavoriteMovie(int id) {
+        Log.d(TAG, "the movie id: " + id);
+        Cursor cursor = getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI,
+                null,
+                "movieId=?",
+                new String[] {Integer.toString(id)},
+                null,
+                null
+        );
+
+        return cursor != null && cursor.getCount() > 0;
     }
 
     private ContentValues getMovieAsContentValues(Movie movie) {
