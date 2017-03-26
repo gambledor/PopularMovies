@@ -9,7 +9,7 @@
         android:adjustViewBounds="true"
         android:layout_gravity="center"
         android:scaleType="centerCrop"
-        android:padding="4dp"
+        android:padding="@dimen/padding_small"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </FrameLayout>

@@ -34,8 +34,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewAdap
     public ReviewAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         int layoutIdForReviewItem = R.layout.rewiew_row;
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        boolean shoudAttachToParentImmediately = false;
-        View view = inflater.inflate(layoutIdForReviewItem, parent, shoudAttachToParentImmediately);
+        boolean shouldAttachToParentImmediately = false;
+        View view = inflater.inflate(layoutIdForReviewItem, parent, shouldAttachToParentImmediately);
 
         return new ReviewAdapterViewHolder(view);
     }
@@ -43,7 +43,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewAdap
     @Override
     public void onBindViewHolder(ReviewAdapterViewHolder holder, int position) {
         if (mReviews == null || mReviews.isEmpty()) {
-            Log.d(TAG, "mReviews is null or empty");
+            Log.w(TAG, "mReviews is null or empty");
             return;
         }
 

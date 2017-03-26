@@ -38,11 +38,11 @@ public class FetchMovieTrailerTask extends AsyncTask<Integer, Void, List<Trailer
 
 
         URL url = NetworkUtility.buildTrailerUrl(integers[0]);
-        Log.d(TAG, "URL -> " + url.toString());
+//        Log.d(TAG, "URL -> " + url.toString());
         TrailerResponse trailerResponse  = null;
         try {
             String jsonTrailerResponse = NetworkUtility.getResponseFromHttpURL(url);
-            Log.d(TAG, "trailer response -> " + jsonTrailerResponse);
+//            Log.d(TAG, "trailer response -> " + jsonTrailerResponse);
             trailerResponse = TrailerMoviesJsonUtils.getTrailerObjectsFromJson(jsonTrailerResponse);
         } catch (IOException | JSONException e) {
             Log.e(TAG, e.getMessage());

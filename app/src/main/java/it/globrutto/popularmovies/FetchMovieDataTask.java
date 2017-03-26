@@ -54,16 +54,16 @@ public class FetchMovieDataTask extends AsyncTask<String, Void, List<Movie>>{
 
         PopularResponse popularResponse = null;
         switch (strings[0]) {
-            case "popular":
-            case "top_rated":
+            case MainActivity.DEFAULT_ORDER:
+            case MainActivity.TOP_RATED:
                 popularResponse = getTheMovieDbMoviesResponse(strings[0]);
                 break;
-            case "favorites":
+            case MainActivity.FAVORITES:
                 popularResponse = new PopularResponse();
                 popularResponse.setResults(getFavoriteMovies());
                 break;
             default:
-                Log.i(TAG, String.format("Wrong API name to call: %s", strings[0]));
+                Log.w(TAG, String.format("Wrong API name to call: %s", strings[0]));
                 return null;
         }
 

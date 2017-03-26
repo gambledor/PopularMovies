@@ -63,7 +63,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
     @Override
     public void onBindViewHolder(TrailerAdapterViewHolder holder, int position) {
         if (mTrailers == null || mTrailers.isEmpty()) {
-            Log.d(TAG, "mTrailers is null or empty");
+            Log.w(TAG, "mTrailers is null or empty");
             return;
         }
 
@@ -84,10 +84,6 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
     public void setTrailers(List<Trailer> trailers) {
         this.mTrailers = trailers;
         notifyDataSetChanged();
-    }
-
-    public List<Trailer> getTrailers() {
-        return mTrailers;
     }
 
     /**

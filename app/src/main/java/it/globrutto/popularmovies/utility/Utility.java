@@ -10,6 +10,8 @@ public class Utility {
 
     private static final int SIZE = 180;
 
+    private static final int MIN_COLUMNS_NUMBER = 2;
+
     /**
      * Calculate the number of columns to desplay in a grid layout
      *
@@ -21,6 +23,6 @@ public class Utility {
         float dpWidth =  displayMetrics.widthPixels / displayMetrics.density;
         int columns = (int) (dpWidth / SIZE);
 
-        return columns;
+        return columns >= 2 ? columns : MIN_COLUMNS_NUMBER;
     }
 }

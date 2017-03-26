@@ -6,13 +6,16 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -83,6 +86,12 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
     @BindView(R.id.ib_movie_favorite)
     ImageButton mFavoriteImageButton = null;
 
+    @BindView(R.id.tb_toolbar)
+    Toolbar mToolbar = null;
+
+    @BindView(R.id.collapsing_toolbar)
+    CollapsingToolbarLayout mCollapsingToolbarLayout = null;
+
     private TrailerAdapter mTrailerAdapter = null;
 
     private ReviewAdapter mReviewAdapter;
@@ -98,25 +107,22 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         if (intentThatStartedActivity != null ) {
             if (intentThatStartedActivity.hasExtra("movie")) {
 
-                LinearLayoutManager trailerLayoutManager = new LinearLayoutManager(this);
-                mTrailerRecyclerView.setLayoutManager(trailerLayoutManager);
-                mTrailerRecyclerView.addItemDecoration(
-                        new DividerItemDecoration(mTrailerRecyclerView.getContext(), trailerLayoutManager.getOrientation()));
-                // create trailer adapter
-                mTrailerAdapter = new TrailerAdapter(getApplicationContext(), this);
-                // attach trailer adapter to recycler view
-                mTrailerRecyclerView.setAdapter(mTrailerAdapter);
+                initTrailerLayout();
+                initTrailerAdapter();
 
-                LinearLayoutManager reviewLayoutManager = new LinearLayoutManager(this);
-                // attach review adapter to recicler view
-                mReviewRecyclerView.setLayoutManager(reviewLayoutManager);
-                mReviewRecyclerView.addItemDecoration(
-                        new DividerItemDecoration(mReviewRecyclerView.getContext(), reviewLayoutManager.getOrientation()));
-                // create review adapter
-                mReviewAdapter = new ReviewAdapter(this);
-                mReviewRecyclerView.setAdapter(mReviewAdapter);
+                initReviewLayout();
+                initReviewAdapter();
 
-                final Movie movie = (Movie) intentThatStartedActivity.getParcelableExtra("movie");
+                final Movie movie = intentThatStartedActivity.getParcelableExtra("movie");
+
+                String movieTitle = movie.getTitle() == null ? movie.getOriginalTitle() : movie.getTitle();
+
+                setSupportActionBar(mToolbar);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+                mCollapsingToolbarLayout.setTitle(movieTitle);
+                mCollapsingToolbarLayout.setExpandedTitleColor(ResourcesCompat.getColor(
+                        getResources(), android.R.color.transparent, null));
 
                 // Load movie trailers
                 new FetchMovieTrailerTask(this, new FetchMovieTrailerTaskCompleteListener()).execute(movie.getId());
@@ -141,8 +147,9 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
                         .error(R.mipmap.ic_image)
                         .into(mThumbnail);
 
-                mHeaderTitle.setText(movie.getOriginalTitle());
-                mTitle.setText(movie.getOriginalTitle());
+                String title = movie.getTitle() == null ? movie.getOriginalTitle() : movie.getTitle();
+                mHeaderTitle.setText(title);
+                mTitle.setText(title);
                 DateFormat dateFormat = new SimpleDateFormat("yyyy");
                 try {
                     mYear.setText(dateFormat.format(dateFormat.parse(movie.getReleaseDate())));
@@ -185,6 +192,34 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 
             }
         }
+    }
+
+    private void initReviewAdapter() {
+        // create review adapter
+        mReviewAdapter = new ReviewAdapter(this);
+        mReviewRecyclerView.setAdapter(mReviewAdapter);
+    }
+
+    private void initReviewLayout() {
+        LinearLayoutManager reviewLayoutManager = new LinearLayoutManager(this);
+        // attach review adapter to recicler view
+        mReviewRecyclerView.setLayoutManager(reviewLayoutManager);
+        mReviewRecyclerView.addItemDecoration(
+                new DividerItemDecoration(mReviewRecyclerView.getContext(), reviewLayoutManager.getOrientation()));
+    }
+
+    private void initTrailerAdapter() {
+        // create trailer adapter
+        mTrailerAdapter = new TrailerAdapter(getApplicationContext(), this);
+        // attach trailer adapter to recycler view
+        mTrailerRecyclerView.setAdapter(mTrailerAdapter);
+    }
+
+    private void initTrailerLayout() {
+        LinearLayoutManager trailerLayoutManager = new LinearLayoutManager(this);
+        mTrailerRecyclerView.setLayoutManager(trailerLayoutManager);
+        mTrailerRecyclerView.addItemDecoration(
+                new DividerItemDecoration(mTrailerRecyclerView.getContext(), trailerLayoutManager.getOrientation()));
     }
 
     /**
