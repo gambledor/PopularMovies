@@ -19,7 +19,7 @@ import it.globrutto.popularmovies.BuildConfig;
 /**
  * Created by giuseppelobrutto on 22/01/17.
  */
-public class NetworkUtility {
+public final class NetworkUtility {
     private final static String TAG = NetworkUtility.class.getSimpleName();
 
     private static final String API_KEY = BuildConfig.MOVIE_DB_API_KEY;
@@ -47,6 +47,11 @@ public class NetworkUtility {
     private static final String REVIEW_PATH = "/reviews";
 
     private static final long CONNECTION_TIMEOUT = TimeUnit.MINUTES.toMillis(1);
+
+
+    private NetworkUtility(){
+        throw new AssertionError(TAG + " is not instantiatable");
+    }
 
     /**
      * Build the URL used to talk to the movie db server using popularity.

@@ -83,7 +83,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
     @BindView(R.id.rv_movie_reviews)
     RecyclerView mReviewRecyclerView = null;
 
-    @BindView(R.id.ib_movie_favorite)
+    @BindView(R.id.fab_movie_favorite)
     ImageButton mFavoriteImageButton = null;
 
     @BindView(R.id.tb_toolbar)

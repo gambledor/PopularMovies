@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         initToolbar();
         // The MovieAdapter is responsible for linking our movies data to the View that will end up
-        // displaing our data.
+        // displaying our data.
         mMovieAdapter = new MovieAdapter(mContext, this);
         initRecyclerView();
 
